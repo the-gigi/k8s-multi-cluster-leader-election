@@ -2,12 +2,11 @@ module github.com/the-gigi/k8s-multi-cluster-leader-election
 
 go 1.18
 
-replace github.com/the-gigi/go-k8s => ../go-k8s
+//replace github.com/the-gigi/go-k8s => ../go-k8s
 
 require (
-	github.com/the-gigi/go-k8s v0.2.0
+	github.com/the-gigi/go-k8s v0.8.0
 	k8s.io/client-go v0.23.6
-	k8s.io/klog v1.0.0
 	k8s.io/klog/v2 v2.60.1
 )
 
@@ -24,6 +23,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f // indirect

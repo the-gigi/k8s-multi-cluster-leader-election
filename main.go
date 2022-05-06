@@ -16,19 +16,19 @@ func run(lock resourcelock.Interface, ctx context.Context, id string) {
 	leaderelection.RunOrDie(ctx, leaderelection.LeaderElectionConfig{
 		Lock:            lock,
 		ReleaseOnCancel: true,
-		LeaseDuration:   15 * time.Second,
-		RenewDeadline:   10 * time.Second,
-		RetryPeriod:     2 * time.Second,
+		LeaseDuration:   10 * time.Second,
+		RenewDeadline:   5 * time.Second,
+		RetryPeriod:     1 * time.Second,
 		Callbacks: leaderelection.LeaderCallbacks{
 			OnStartedLeading: func(c context.Context) {
-				klog.Infof("I (%s) will lead you to greatness!", id)
+				klog.Info("started leading.")
 			},
 			OnStoppedLeading: func() {
 				klog.Info("no longer the leader, staying inactive.")
 			},
 			OnNewLeader: func(currentId string) {
 				if currentId == id {
-					klog.Info("I am your leader!")
+					klog.Infof("I am %s! I will lead you to greatness!", id)
 					return
 				}
 				klog.Infof("All hail %s", currentId)
