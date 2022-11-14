@@ -3,7 +3,7 @@ Demonstrate multi-cluster leader election in Kubernetes using the client-go [lea
 
 Multi-cluster leader election is useful in high-availability scenarios where you want your workload to keep running without interruption even if an entire cluster goes down. You can deploy your workload to multiple clusters, potentially in different regions, and they can all perform leader election across clusters using the [leaderelection](https://github.com/kubernetes/client-go/tree/master/tools/leaderelection) package with no changes. 
 
-The demo application is inspired by [k8s-lesder-election](https://github.com/mayankshah1607/k8s-leader-election), which is a sample application that demonstrates in-cluster leader election using the built-in LeaseLock. 
+The demo application is inspired by [k8s-leader-election](https://github.com/mayankshah1607/k8s-leader-election), which is a sample application that demonstrates in-cluster leader election using the built-in LeaseLock. 
 
 [Mayank Shah](https://github.com/mayankshah1607) did a great job explaining how leader election works in general in his article: [Leader election in Kubernetes using client-go](https://itnext.io/leader-election-in-kubernetes-using-client-go-a19cbe7a9a85).
 
