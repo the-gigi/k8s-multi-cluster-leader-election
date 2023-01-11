@@ -8,7 +8,7 @@ The demo application is inspired by [k8s-leader-election](https://github.com/may
 
 [Mayank Shah](https://github.com/mayankshah1607) did a great job explaining how leader election works in general in his article: [Leader election in Kubernetes using client-go](https://itnext.io/leader-election-in-kubernetes-using-client-go-a19cbe7a9a85).
 
-What's different about this application is that it uses a custom global [resource lock based on a Github gist](https://github.com/the-gigi/go-k8s/tree/main/pkg/multi_cluster_lock) that implements the [resourcelock.Interface](https://github.com/kubernetes/client-go/blob/28ccde769fc5519dd84e5512ebf303ac86ef9d7c/tools/leaderelection/resourcelock/interface.go#L144) interface:
+What's different about this application is that it uses a custom global [resource lock](https://github.com/the-gigi/go-k8s/tree/main/pkg/multi_cluster_lock)  based on a Github gist that implements the [resourcelock.Interface](https://github.com/kubernetes/client-go/blob/28ccde769fc5519dd84e5512ebf303ac86ef9d7c/tools/leaderelection/resourcelock/interface.go#L144) interface:
 
 ```
 // Interface offers a common interface for locking on arbitrary
@@ -38,14 +38,14 @@ type Interface interface {
 }
 ```
 
-The client-go leaderelection package is designed to accept any lock that implements the resourcelock.Interface interface, so it
+The client-go leaderelection package is designed to accept any lock that implements the `resourcelock.Interface` interface, so it
 is not limited to operate inside a single cluster, just because the built-in locks are all in-cluster objects.
 
 To test the cross-cluster leader election I create three virtual clusters and show how leader election works when killing the leader.
 
 # Prerequisites for running the leader election demo
 
-This setup is using my (Gigi) Dockerhub account to push images to, my Github account and private access token to store the shared lock in a private Gist.
+This setup is using my (Gigi) Dockerhub account to push images to my Github account and private access token to store the shared lock in a private Gist.
 
 If you want to replicate this yourself you need to change [values.yaml](helm/leader-elector/values.yaml) file and replace
 the target Docker registry/repository as well as the Gist Id:
