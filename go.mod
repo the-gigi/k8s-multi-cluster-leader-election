@@ -1,6 +1,6 @@
 module github.com/the-gigi/k8s-multi-cluster-leader-election
 
-go 1.18
+go 1.19
 
 //replace github.com/the-gigi/go-k8s => ../go-k8s
 

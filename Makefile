@@ -18,10 +18,16 @@ help:
 build:
 	./cicd.sh build
 
-## Create 3 kind clusters and deploy the deploy the leader election demo app to all of them
-deploy:
+## Create 3 virtual cluster in a kind cluster called kind-kind
+provision:
+	./cicd.sh provision
+
+## Deploy the leader election demo app to all the virtual clusters
+deploy: provision
 	./cicd.sh deploy
 
-## Demonstrate multi-cluster leader election works when killing the the current leader
-test: deploy
-	./cicd.sh test
+## Check the logs of all participants in the leader election
+check-leader:
+	./cicd.sh check-leader
+
+
