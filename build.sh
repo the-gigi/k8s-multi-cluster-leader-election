@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION=0.8
+VERSION=0.9
 IMAGE=g1g1/multi-cluster-leader-election
 
 if ! docker buildx ls | grep -q "the-builder"; then

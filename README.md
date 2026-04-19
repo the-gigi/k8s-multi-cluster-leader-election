@@ -49,7 +49,7 @@ To test cross-cluster leader election the demo creates three virtual clusters an
 The default [values.yaml](helm/leader-elector/values.yaml) points at the image in my (Gigi) DockerHub and a private Gist I own:
 
 ```
-image: g1g1/multi-cluster-leader-election:0.8
+image: g1g1/multi-cluster-leader-election:0.9
 gist: 49602e14c52b53a41862a174b629c7b2
 ```
 
