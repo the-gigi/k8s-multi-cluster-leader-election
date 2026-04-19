@@ -1,0 +1,13 @@
+.git
+.gitignore
+README.md
+LICENSE
+Makefile
+cicd.sh
+build.sh
+helm/
+*.md
+*.tmp
+*.swp
+*~
+*.log
