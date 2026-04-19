@@ -1,2 +1,2 @@
-image: g1g1/multi-cluster-leader-election:0.9
+image: g1g1/multi-cluster-leader-election:1.0
 gist: 49602e14c52b53a41862a174b629c7b2

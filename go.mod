@@ -5,7 +5,7 @@ go 1.26
 //replace github.com/the-gigi/go-k8s => ../go-k8s
 
 require (
-	github.com/the-gigi/go-k8s v1.1.0
+	github.com/the-gigi/go-k8s v1.1.1
 	k8s.io/client-go v0.35.3
 	k8s.io/klog/v2 v2.130.1
 )
