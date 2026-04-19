@@ -6,6 +6,7 @@ import (
 	"github.com/the-gigi/go-k8s/pkg/multi_cluster_lock"
 	"k8s.io/client-go/tools/leaderelection"
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
+	"k8s.io/klog/v2"
 	"os"
 	"time"
 )
@@ -15,9 +16,9 @@ func run(lock resourcelock.Interface, ctx context.Context, id string) {
     leaderelection.RunOrDie(ctx, leaderelection.LeaderElectionConfig{
         Lock:            lock,
         ReleaseOnCancel: true,
-        LeaseDuration:   10 * time.Second,
-        RenewDeadline:   5 * time.Second,
-        RetryPeriod:     1 * time.Second,
+        LeaseDuration:   30 * time.Second,
+        RenewDeadline:   15 * time.Second,
+        RetryPeriod:     5 * time.Second,
         Callbacks: leaderelection.LeaderCallbacks{
             OnStartedLeading: func(c context.Context) {
                 klog.Info("started leading.")

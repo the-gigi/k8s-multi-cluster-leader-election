@@ -1,21 +1,20 @@
-FROM --platform=linux/amd64 golang:1.19 AS builder
+# syntax=docker/dockerfile:1.7
+
+FROM --platform=$BUILDPLATFORM golang:1.26-bookworm@sha256:4f4ab2c90005e7e63cb631f0b4427f05422f241622ee3ec4727cc5febbf83e34 AS builder
 
 WORKDIR /build
 
-ADD go.mod  go.mod
-ADD main.go main.go
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Update
-RUN apt-get --allow-releaseinfo-change update && apt upgrade -y
+COPY main.go ./
 
-# Fetch dependencies
-RUN go mod tidy &&  \
-    go mod download all
+ARG TARGETOS
+ARG TARGETARCH
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -trimpath -tags netgo -ldflags '-s -w' -o /leader_elector .
 
-# Build image as a truly static Go binary
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /leader_elector -a -tags netgo -ldflags '-s -w' .
-
-FROM --platform=linux/amd64 gcr.io/distroless/base-debian11
-MAINTAINER Gigi Sayfan <the.gigi@gmail.com>
+FROM gcr.io/distroless/static-debian12:nonroot@sha256:a9329520abc449e3b14d5bc3a6ffae065bdde0f02667fa10880c49b35c109fd1
 COPY --from=builder /leader_elector /leader_elector
+USER nonroot:nonroot
 ENTRYPOINT ["/leader_elector"]

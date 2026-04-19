@@ -14,10 +14,7 @@ IMAGE="g1g1/multi-cluster-leader-election:${VERSION}"
 CLUSTERS=(napoleon cleopatra stalin)
 
 function build() {
-  echo "building $IMAGE"
-	echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-	docker build . -t $IMAGE
-	docker push $IMAGE
+  ./build.sh
 }
 
 function provision() {
@@ -25,27 +22,30 @@ function provision() {
     echo --- creating a kind cluster...
     kind create cluster
   else
-    kubectl config set-context kind-kind
+    kubectl config use-context kind-kind
   fi
 
-  if [[ $(kubectl config current-context) -ne kind-kind ]]; then
+  if [[ $(kubectl config current-context) != kind-kind ]]; then
     echo kube context should be "kind-kind"
     return 1
   fi
 
   echo --- preparing three virtual clusters: Napoleon, Cleopatra and Stalin
   for cluster in $CLUSTERS[@]; do
+    # Always reset to the host kind cluster before each step so we don't
+    # accidentally create or connect inside a previously-connected vcluster.
+    kubectl config use-context kind-kind > /dev/null
     if ! [[ $(vcluster list | rg $cluster) ]]; then
       echo preparing virtual cluster $cluster...
-      vcluster create $cluster -n $cluster --context kind-kind
-      vcluster disconnect
+      vcluster create $cluster -n $cluster --connect=false
+    fi
+    if ! [[ $(kubectl config get-contexts -o name | rg "^vcluster_${cluster}_${cluster}_kind-kind$") ]]; then
+      echo connecting to vcluster $cluster...
+      vcluster connect $cluster -n $cluster
     fi
   done
 
-  if [[ $(kubectl config current-context) -ne kind-kind ]]; then
-    echo kube context should be "kind-kind"
-    return 1
-  fi
+  kubectl config use-context kind-kind > /dev/null
 }
 
 function deploy() {
@@ -55,8 +55,8 @@ function deploy() {
   for cluster in $CLUSTERS[@]; do
     echo deploying leader-elector to $cluster cluster
     context="vcluster_${cluster}_${cluster}_kind-kind"
-    helm3 upgrade leader-elector helm/leader-elector  --install --kube-context $context \
-          --set name=$cluster
+    helm upgrade leader-elector helm/leader-elector --install --kube-context $context \
+          --set name=$cluster \
           --set token=$LEADER_ELECTION_GITHUB_API_TOKEN
   done
 }
